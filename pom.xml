@@ -13,6 +13,23 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.odoko.App</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <dependencies>
     <dependency>
@@ -27,9 +44,9 @@
       <version>3.1</version>
     </dependency>
     <dependency>
-	<groupId>org.apache.solr</groupId>
-	<artifactId>solr-solrj</artifactId>
-	<version>4.1.0</version>
+  <groupId>org.apache.solr</groupId>
+  <artifactId>solr-solrj</artifactId>
+  <version>4.1.0</version>
     </dependency>
     <dependency>
         <groupId>org.slf4j</groupId>
