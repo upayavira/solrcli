@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.odoko.solrcli.actions.Action;
+import com.odoko.solrcli.actions.ArgPostAction;
+import com.odoko.solrcli.actions.FilePostAction;
+import com.odoko.solrcli.actions.SearchAction;
+import com.odoko.solrcli.actions.StdinPostAction;
+
 /**
  * Initial actions:
  *   - clone post.jar
@@ -23,15 +29,25 @@ public class App
   private String actionname = null;
   private Map<String,String> options = new HashMap<String,String>();
   private List<String> arguments = new ArrayList<String>();
- 
+  private Map<String, Action> actions = new HashMap<String, Action>();
+  
   public static void main( String[] args ) throws Exception {
     new App(args).go();
   }
     
   public App(String[] args) {
+	init();
     parseArgs(args);
   }
 
+  public void init() {
+	 actions.put("search", new SearchAction());
+	 actions.put("files", new FilePostAction());
+	 actions.put("stdin", new StdinPostAction());
+	 actions.put("post", new ArgPostAction());
+	 //actions.put("crawl", new CrawlPostAction());
+  }
+  
   private void parseArgs(String[] args) {
     for (int i=0; i<args.length; i++) {
       String arg = args[i];
@@ -55,8 +71,8 @@ public class App
 
   private Action getAction() {
     Action action;
-    if (actionname.equals("search")) {
-      action = new SearchAction();
+    if (actions.containsKey(actionname)) {
+      action = actions.get(actionname);
     } else {
       throw new RuntimeException("Unknown action: " + actionname);
     }

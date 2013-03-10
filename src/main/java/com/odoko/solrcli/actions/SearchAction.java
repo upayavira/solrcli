@@ -1,4 +1,4 @@
-package com.odoko;
+package com.odoko.solrcli.actions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +22,14 @@ public class SearchAction extends AbstractAction {
   private Map<String,String> params = new HashMap<String, String>();
   
   @Override
+  public String usage() {
+	  return "search <query> -arg=value -arg"; 
+  }
+  
+  @Override
   public void init() {
     if (arguments.size() > 0) {
-      querystring = arguments.get(0);
+      querystring = StringUtils.join(arguments, " ");
     }
     for (Entry<String, String> option : options.entrySet()) {
       String key = option.getKey();
@@ -33,7 +38,7 @@ public class SearchAction extends AbstractAction {
         if (value == null) {
           omitHeader = true;
         } else {
-            omitHeader=parseBoolean(value);
+            omitHeader=isTrue(value);
         }
       } else if (key.equals("fl")) {
         fieldlist = parseFieldList(value);
@@ -45,7 +50,7 @@ public class SearchAction extends AbstractAction {
   
   @Override
   public void go() {
-    SolrServer server = new HttpSolrServer("http://localhost:8983/solr");
+    SolrServer server = getSolrServer();
 
     try {
       SolrQuery query = new SolrQuery();
